@@ -2,9 +2,10 @@
 #include <my.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <mpu6050.h>
 
 // Global variable
-uint16_t result;
+unsigned int result;
 
 // Function Prototypes
 void configureClocks(void);
@@ -60,17 +61,17 @@ int main(void) {
     ADCCTL0 |= ADCSC;     // Start ADC conversion
     ADCIE|= ADCIE0;
 
+    initialize_I2C(1);
+    initialize_adc();
     initializeUART();     // Initialize UART communication
     __enable_interrupt(); // Enable global interrupts*/
 
     while (1) {
-
-        /*if(!(ADCIFG & ADCIFG0)){ // Wait until ADC conversion completes
-        if(UCA0IE & UCTXCPTIE);{
-        result = ADCMEM0;            // Read the ADC value after completion
-        send(result); }} */              // Send ADC conversion result via UART
-
-       // __delay_cycles(24000);       // Add some delay between conversions
+        readByte(0x12,3);
+        result=Data_in[0];
+        result=(result<<8)|Data_in[1];
+        result=(result<<8)|Data_in[2];
+        send(result);
     }
 
 
@@ -81,7 +82,7 @@ int main(void) {
 __interrupt void ADC_ISR(void){
     if(UCA0IE & UCTXCPTIE);{
     result = ADCMEM0;            // Read the ADC value after completion
-    send(result);
+    //send(result);
     }
 
 }

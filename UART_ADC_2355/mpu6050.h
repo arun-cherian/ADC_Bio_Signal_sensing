@@ -4,8 +4,8 @@
  *  Created on: 24-Oct-2023
  *      Author: Arun
  */
-#ifndef MPU6050_H_
-#define MPU6050_H_
+#ifndef ADC_24_H_
+#define ADC_24_H_
 void readByte(char,char);
 void writeByte(char,char);
 void initialize_I2C(char);
@@ -19,4 +19,4 @@ char exept;
 
 
 
-#endif /* MPU6050_H_ */
+#endif /* ADC_24_H_ */

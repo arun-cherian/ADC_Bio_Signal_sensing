@@ -1,6 +1,6 @@
+#include <mpu6050.h>
 #include <msp430.h> 
 #include<stdint.h>
-#include<mpu6050.h>
 
 char flag=1;
 void readByte(char reg, char len){
@@ -92,23 +92,6 @@ void initialize_adc(){
     writeByte(0x02,x);//320 sps
     exept=0;
 }
-
-int16_t accx(){
-    int16_t result = (Data_in[0] << 8) | Data_in[1];
-    return result;
-}
-
-int16_t accy(){
-    int16_t result = (Data_in[2] << 8) | Data_in[3];
-    return result;
-}
-
-int16_t accz(){
-    int16_t result = (Data_in[4] << 8) | Data_in[5];
-    return result;
-}
-
-
 
 
 
