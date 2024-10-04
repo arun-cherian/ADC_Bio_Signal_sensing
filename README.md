@@ -15,7 +15,7 @@ Challenege:
   1.2.UART communication is error prone
   1.3.Needs optimised code possibly using a DMA(might neot be needed)
 Solutions :
- 1.1. Bumbed up the MSP430 clock to 24MHz
+ 1.1. Bumped up the MSP430 clock to 24MHz
  1.2.Used an external USB to UART converter
  1.3. Carefully debugged the UART signals by connecting to an FPGA
    1.3.1. Used a verilog HDL file and signal tap in Quartus to sample the signal and determine accurate baud rate divider and modulation bits
