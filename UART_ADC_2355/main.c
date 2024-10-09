@@ -5,12 +5,14 @@
 #include <mpu6050.h>
 
 // Global variable
-unsigned int result;
+unsigned int result=0;
+uint8_t bit;
+int currentState = 3;  // Used to track the current step in the sequence
 
 // Function Prototypes
 void configureClocks(void);
 void initializeUART(void);
-void send(uint16_t value);
+void set(void);
 
 void configureClocks(void) {
     // Stop the watchdog timer
@@ -34,7 +36,7 @@ int main(void) {
     initializeUART();
     configureClocks();
 
-
+    __enable_interrupt(); // Enable global interrupts*/
     // Configure ADC registers
     ADCCTL0 &= ~ADCSHT;   // Clear sample-and-hold bits
     ADCCTL0 |= ADCSHT_2;  // Set sample-and-hold time to 16 ADC clock cycles
@@ -51,10 +53,14 @@ int main(void) {
     ADCCTL2 |= ADCPDIV_1; //DIVIDE BY 4
 
     ADCMCTL0 &= ~ADCINCH;        // Clear channel selection bits
-    ADCMCTL0 |= ADCINCH_2;       // Select input channel A2
+    ADCMCTL0 |= ADCINCH_1;       // Select input channel A2
     // Configure the pin for analog input (P5.2 -> A12)
-    P1SEL1 |= BIT2;
-    P1SEL0 |= BIT2;
+    P1SEL1 |= BIT1;
+    P1SEL0 |= BIT1;
+    P1DIR&=~BIT2;
+    P1SEL1&=~BIT2;
+    P1SEL0&=~BIT2;
+    //P1IE|=BIT2;
 
 
     ADCCTL0 |= ADCENC;    // Enable ADC conversion
@@ -63,26 +69,60 @@ int main(void) {
 
     initialize_I2C(1);
     initialize_adc();
-    initializeUART();     // Initialize UART communication
-    __enable_interrupt(); // Enable global interrupts*/
+    UCA0IE &= ~UCTXCPTIE;
+
 
     while (1) {
-        readByte(0x12,3);
-        result=Data_in[0];
-        result=(result<<8)|Data_in[1];
-        result=(result<<8)|Data_in[2];
-        send(result);
+        //writeByte(0x00,2);
+        switch (currentState) {
+            case 0:
+                exept=1;
+                r = 0;
+                readByte(0x11, 1); // Read the first byte
+                currentState = 1;  // Move to the next state
+                break;
+
+            case 1:
+                r = 1;
+                readByte(0x12, 1); // Read the second byte
+                currentState = 2;  // Move to the next state
+                break;
+
+            case 2:
+                r = 2;
+                readByte(0x13, 1); // Read the third byte
+                currentState = 3;  // Reset to initial state
+                exept=0;
+                // You can add further actions here, like processing the data or sending it
+                break;
+            default: break;
+        }
     }
 
 
     return 0;
 }
 
+
 #pragma vector =ADC_VECTOR
 __interrupt void ADC_ISR(void){
-    if(UCA0IE & UCTXCPTIE);{
-    result = ADCMEM0;            // Read the ADC value after completion
-    //send(result);
-    }
+    if(UCA0IE & UCTXCPTIE);
+        UCA0TXBUF = ADCMEM0_L;
+        while(!(UCA0IFG & UCTXCPTIFG));
+        UCA0TXBUF = ADCMEM0_H;
+        UCA0IFG &= ~UCTXCPTIFG;
 
+
+
+}
+#pragma vector=PORT1_VECTOR
+__interrupt void PORT1_ISR(void){
+    if(P1IFG & BIT2){
+        currentState=0;
+        result=Data_in[0];
+        result=(result<<8)|Data_in[1];
+        result=(result<<8)|Data_in[2];
+        P1IFG&=~BIT2;
+        send(result);
+    }
 }

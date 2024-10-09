@@ -12,7 +12,7 @@
 #include <my.h>
 
 // Function Prototypes
-void send(int);
+void send(unsigned int);
 void convert(void);
 void initializeUART(void);
 void configureClocks(void);
@@ -50,7 +50,7 @@ void initializeUART() {
     __enable_interrupt();
 }
 
-void send(int f) {
+void send(unsigned int f) {
     kindi = f;
     convert();
 //    memcpy(B, A, 5 * sizeof(int));
@@ -98,7 +98,8 @@ __interrupt void UART(void) {
         else{
         s=4;
         UCA0TXBUF = '\n';
-        UCA0IE &= ~UCTXCPTIE;}
+        UCA0IE &= ~UCTXCPTIE;
+        }
   UCA0IFG &= ~UCTXCPTIFG; // Clear transmit complete flag
 }
 
