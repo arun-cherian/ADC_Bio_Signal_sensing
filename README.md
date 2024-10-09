@@ -21,5 +21,13 @@ Solutions :
    1.3.1. Used a verilog HDL file and signal tap in Quartus to sample the signal and determine accurate baud rate divider and modulation bits
 
  Challenge:
- 1. Aquiring Signals to maltlab and processing 
+ 2. How to differeciate between NU7802 data and MSP data since they are both transmitted through same media(UART)
+    solution:
+    2.1 sent the NU7802 data as a packet in between the normal UART data like .json
+    2.2 It will look something like this{starter_byte,data2,data1,data0,dealy_num,stopper_byte}
+    2.3 you  might be wondering what is delay_num, it is the number of UART data that was transmitted after the ADC gave the data ready signal counter through software
+
+  
+    
+    
    
