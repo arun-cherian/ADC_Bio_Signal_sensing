@@ -26,8 +26,16 @@ Solutions :
     2.1 sent the NU7802 data as a packet in between the normal UART data like .json
     2.2 It will look something like this{starter_byte,data2,data1,data0,dealy_num,stopper_byte}
     2.3 you  might be wondering what is delay_num, it is the number of UART data that was transmitted after the ADC gave the data ready signal counter through software
+    2.4 Data send in packets of 8 bit each; first 6 LSB sends data; first two MSP sends serial number of data ; Matlab code needs to be implemented for proper sorting based on serial number
 
   
-    
+  Challenge:
+  3.  ADC is triggering UART faster than it can send the data 
+    3.1 A compromise has to be made as there is no way to send data any faster though UART
+    3.2 ADC updates the values while UART is sending sometimes but data reliabilty is good 
+    3.3 ADC is stopped while sending NU7802 data since data could be corrupted by the very fast ADC data
+
+
+    //////////////// MSP code has been finalized and uploaded on 14.10.2024 ///////////////////////////////////////////////////////
     
    
