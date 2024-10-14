@@ -12,16 +12,17 @@
 #include <my.h>
 
 // Function Prototypes
+void send2(unsigned int);
 void send(unsigned int);
 void convert(void);
 void initializeUART(void);
 void configureClocks(void);
 
 // Variables
-int s = 4;
+//uint16_t count_bytes;
+int s =0;
 int kindi = 0;
 uint8_t A[5];
-uint8_t data[2];
 
 
 #include <msp430.h>
@@ -50,7 +51,28 @@ void initializeUART() {
     __enable_interrupt();
 }
 
-void send(unsigned int f) {
+void send(unsigned int f){
+    //if(s==0){
+    A[0]=f&0x3F;
+    A[1]=(f&0xFC0)>>6;
+    UCA0IE|= UCTXCPTIE;
+    UCA0IFG|=UCTXCPTIFG;
+    //}
+}
+
+void send2(unsigned int f){
+    while(!(s==0));
+    ADCIE&= ~ADCIE0;
+    A[0]=f&0x3F;
+    A[1]=(f&0xFC0)>>6;
+    A[2]=(f&0x3F000)>>12;
+    //A[3]=(f&0xFC0000)>>18;
+    UCA0IE|= UCTXCPTIE;
+    count_bytes=3;
+    UCA0IFG|=UCTXCPTIFG;
+}
+
+/*void send(unsigned int f) {
     kindi = f;
     convert();
 //    memcpy(B, A, 5 * sizeof(int));
@@ -87,18 +109,20 @@ void convert() {
         }
     }
 }
-
+*/
 
 
 #pragma vector=EUSCI_A0_VECTOR
 __interrupt void UART(void) {
-        if(s>=0){
+
+    if(s<=count_bytes-1){
+        A[s]|=(s<<6);
         UCA0TXBUF = A[s]; // Send lower byte
-        s--;}
+        s++;}
         else{
-        s=4;
-        UCA0TXBUF = '\n';
         UCA0IE &= ~UCTXCPTIE;
+        ADCIE|= ADCIE0;
+        s=0;
         }
   UCA0IFG &= ~UCTXCPTIFG; // Clear transmit complete flag
 }

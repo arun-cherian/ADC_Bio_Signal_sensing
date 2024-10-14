@@ -8,7 +8,12 @@
 #ifndef MY_H_
 #define MY_H_
 
+#include<stdio.h>
+#include <stdint.h>
 extern s;
+extern count_bytes;
+extern count;
+
 
 
 

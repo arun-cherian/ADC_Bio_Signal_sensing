@@ -11,8 +11,8 @@ void writeByte(char,char);
 void initialize_I2C(char);
 void initialize_adc();
 
-
-char Data_in[10],Data_out[10];
+int Data_out[3];
+unsigned int data;
 char t,r;
 char exept;
 

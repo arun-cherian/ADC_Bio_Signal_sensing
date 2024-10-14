@@ -73,18 +73,18 @@ void initialize_adc(){
     writeByte(0x00,1);
     writeByte(0x00,0);
     readByte(0x00,1);
-    x=Data_in[0];
+    x=data;
     x|=0b10000110;
     writeByte(0x00,x); //power up digital
 
 
     readByte(0x01,1);
-    x=Data_in[0];
-    x&=0b00100000;
+    x=data;
+    x|=0b00100000;
     writeByte(0x01,x);//vldo 3.3v
 
     readByte(0x02,1);
-    x=Data_in[0];
+    x=data;
     x|=0b01111000;
     writeByte(0x02,x);//320 sps
     exept=0;
@@ -94,7 +94,7 @@ void initialize_adc(){
 __interrupt void MPU650(void){
     switch(UCB1IV){
     case 0x16:               //receive
-        Data_in[r]= UCB1RXBUF;
+        data= UCB1RXBUF;
         r++ ;
         UCB1IFG&=~UCRXIFG0;
         break;
