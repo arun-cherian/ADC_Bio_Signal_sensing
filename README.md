@@ -34,8 +34,17 @@ Solutions :
     3.1 A compromise has to be made as there is no way to send data any faster though UART
     3.2 ADC updates the values while UART is sending sometimes but data reliabilty is good 
     3.3 ADC is stopped while sending NU7802 data since data could be corrupted by the very fast ADC data
+  
 
 
     //////////////// MSP code has been finalized and uploaded on 14.10.2024 ///////////////////////////////////////////////////////
+
+Challenge:1. Matlab identifying the data as 12 bit or 16 bit
+          solutions
+          1. Since the data is coming as 2 byte or 3 byte format and each byte has a two bit identifyed in beginning
+          2. Matlab code has case statements for each of the identifier and uppends the data into a vaible each time a new data arrives
+          3. If the uppending happes 3 times it is identified as 16 bit data
+          
+          
     
    
