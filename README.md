@@ -44,7 +44,11 @@ Challenge:1. Matlab identifying the data as 12 bit or 16 bit
           1. Since the data is coming as 2 byte or 3 byte format and each byte has a two bit identifyed in beginning
           2. Matlab code has case statements for each of the identifier and uppends the data into a vaible each time a new data arrives
           3. If the uppending happes 3 times it is identified as 16 bit data
-          
+Challenge :2  Data coming from the controller is so large that MATLAB is not able to process it live
+          solutions
+          1. MATLAB buffers the data into an array or a file(file does not work since processing is even slower)
+          2. Have to try out optimizing the code or use some harware acceleration
+          3.
           
     
    
