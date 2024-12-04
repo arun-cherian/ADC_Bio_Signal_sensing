@@ -48,7 +48,8 @@ Challenge :2  Data coming from the controller is so large that MATLAB is not abl
           solutions
           1. MATLAB buffers the data into an array or a file(file does not work since processing is even slower)
           2. Have to try out optimizing the code or use some harware acceleration
-          3.
+          3. Simulink is the way to go. created a level 2 s function so that I can do all the matlab code stuff in that block
+          4, Data rate is still a challenge have to implement to check
           
     
    
