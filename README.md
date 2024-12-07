@@ -13,7 +13,7 @@ Challenege:
 1. Getting the data from ADC to pc(implemeted using MSP430FR2355)
   1.1.Very High baud rate needed(921600 baud/s) for handling a sampling rate of 200Ksps
   1.2.UART communication is error prone
-  1.3.Needs optimised code possibly using a DMA(might neot be needed)
+  1.3.Needs optimised code possibly using a DMA(might not be needed)
 Solutions :
  1.1. Bumped up the MSP430 clock to 24MHz
  1.2.Used an external USB to UART converter
@@ -44,12 +44,17 @@ Challenge:1. Matlab identifying the data as 12 bit or 16 bit
           1. Since the data is coming as 2 byte or 3 byte format and each byte has a two bit identifyed in beginning
           2. Matlab code has case statements for each of the identifier and uppends the data into a vaible each time a new data arrives
           3. If the uppending happes 3 times it is identified as 16 bit data
+          
 Challenge :2  Data coming from the controller is so large that MATLAB is not able to process it live
           solutions
           1. MATLAB buffers the data into an array or a file(file does not work since processing is even slower)
           2. Have to try out optimizing the code or use some harware acceleration
           3. Simulink is the way to go. created a level 2 s function so that I can do all the matlab code stuff in that block
-          4, Data rate is still a challenge have to implement to check
+          4. Data rate is still a challenge have to implement to check
+          5. Frame based sampling of the scope successfully demostrated the ability to run in real time with sifficient speed
+          
+Challege :3 The final challenge of combining the two data from both microcontrollers
+          1. Are there some variation in the way the two ADCs responf to voltage variation, if so what is the relation?
           
     
    
