@@ -54,7 +54,12 @@ Challenge :2  Data coming from the controller is so large that MATLAB is not abl
           5. Frame based sampling of the scope successfully demostrated the ability to run in real time with sifficient speed
           
 Challege :3 The final challenge of combining the two data from both microcontrollers
-          1. Are there some variation in the way the two ADCs responf to voltage variation, if so what is the relation?
+          3.1 Are there some variation in the way the two ADCs responf to voltage variation, if so what is the relation?
+          3.2 How to make sense of the EMG data?
+              1. lot of artifacts and noise- the laptop charger plug being removed makes a remarkable difference
+              2. Bandpass filtering is an option/ kalman filtering/ some kind of filter to reduce noise
+              3. Does FFT make any difference? If so what should be the sample for FFT? Will it defeat the real time nature of the project?
+              . A lot of unanswered questions, dont know where to start. gemini or chatgpt not of much help
           
     
    
