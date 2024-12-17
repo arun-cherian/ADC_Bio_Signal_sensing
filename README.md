@@ -60,6 +60,10 @@ Challege :3 The final challenge of combining the two data from both microcontrol
               2. Bandpass filtering is an option/ kalman filtering/ some kind of filter to reduce noise
               3. Does FFT make any difference? If so what should be the sample for FFT? Will it defeat the real time nature of the project?
               . A lot of unanswered questions, dont know where to start. gemini or chatgpt not of much help
+          Solutions:
+          1. Simulation was made real time using Real time desktop library of matlab
+          2. Filtering began working after this change along with step time adjustment with presice calculation of the data throughput(about 11k samples per second for 12bit data)
+          3. The harware seems to not output any meaningful EMG data in 60Hz-300Hz-have to try with differnt components;Hardware high pass filter for 50 Hz may not be working
           
     
    
