@@ -1,12 +1,15 @@
-
 function UART_model2(block)
     setup(block);
 end
 
 function setup(block)
+    global length12;
+    global length16;
+    length12 = 100;
+    length16 = 5;
     % Register number of ports
     block.NumInputPorts  = 1;
-    block.NumOutputPorts = 2;
+    block.NumOutputPorts = 3;
     % Setup port properties to be inherited or dynamic
     block.SetPreCompInpPortInfoToDynamic;
     block.SetPreCompOutPortInfoToDynamic;
@@ -16,15 +19,20 @@ function setup(block)
     block.InputPort(1).Complexity  = 'Real';
     block.InputPort(1).DirectFeedthrough = true;
     % Override output port properties
-    block.OutputPort(1).Dimensions       = 1;
-    block.OutputPort(1).DatatypeID  = 0; % double
+    block.OutputPort(1).DatatypeID = 0;  % uint32
+    block.OutputPort(1).Dimensions = length12;
     block.OutputPort(1).Complexity  = 'Real';
+    block.OutputPort(2).DatatypeID = 0;  % uint32
+    block.OutputPort(2).Dimensions = length16;
+    block.OutputPort(2).Complexity  = 'Real';
+    block.OutputPort(3).DatatypeID = 0;  % uint32
+    block.OutputPort(3).Dimensions = 1;
+    block.OutputPort(3).Complexity  = 'Real';
     % Register parameters
     block.NumDialogPrms     = 0;
     % Register sample times
-    block.SampleTimes = [0 0];
+    block.SampleTimes = [-1 0];
     block.SimStateCompliance = 'DefaultSimState';
-
     block.RegBlockMethod('Start', @Start);
     block.RegBlockMethod('Outputs', @Outputs);     % Required
     block.RegBlockMethod('Update', @Update);
@@ -32,60 +40,60 @@ function setup(block)
 end
 
 function Start(block)
-     global s;
-    
-    global new12;
-    global new16;
-    
-    global head12;
-    global tail12;
-    global head16;
-    global tail16;
-    
-    global buffer_size12;
-    global buffer_size16;
-    
-    global bufferd;
-    global prev_byte;
-    serialPort = "COM3";  % Change to your COM port
+    global s;
+    global count;
+    global fifo12;
+    global fifo16;
+
+    fifo12 = [];
+    fifo16 = [];
+
+    serialPort = "COM4";  % Change to your COM port
     baudRate = 912600;
     s = serialport(serialPort, baudRate);
-    buffer_size16 = 5000; % Adjust buffer size as needed
-    buffer_size12 = 10000;
-    new12 = zeros(1, buffer_size12);
-    new16 = zeros(1, buffer_size16);
-    head12 = 1;
-    tail12 = 1;
-    head16 = 1;
-    tail16 = 1;
     bufferd = 0;
     prev_byte = 0;
 end
 
 function Outputs(block)
-    % ... (Rest of your Outputs function)
+    global count;
+    global s;
+    global fifo12;
+    global fifo16;
+    global length12;
+    global length16;
+
+    % Output data from FIFO buffers
+    if length(fifo12) >= length12
+        block.OutputPort(1).Data = fifo12(1:length12);
+        fifo12(1:length12) = [];
+        if length(fifo12)>10000
+            fifo12=[];
+        end
+    else
+        %block.RegBlockMethod('Outputs', @Update); 
+    end
+    if length(fifo16) >= length16
+        block.OutputPort(2).Data = fifo16(1:length16);
+        fifo16(1:length16) = [];
+        if length(fifo16)>10000
+            fifo16=[];
+        end
+    end
+
+    block.OutputPort(3).Data = length(fifo12);
 end
 
 function Update(block)
-     global s;
-    
-    global new12;
-    global new16;
-    
-    global head12;
-    global tail12;
-    global head16;
-    global tail16;
-    
-    global buffer_size12;
-    global buffer_size16;
-    
+    global s;
+    global fifo12;
+    global fifo16;
     global bufferd;
     global prev_byte;
-
+    global count;
     if s.NumBytesAvailable > 0
         data = read(s, s.NumBytesAvailable, 'uint8');
-
+        count = 0;
         for i = 1:length(data)
             byte = data(i);
             % Get the first two bits of the byte to determine the type
@@ -98,18 +106,10 @@ function Update(block)
                 case 0 % '00xxxxxx' - 16-bit data LSB
                     if prev_byte == 1
                         % Store 12-bit data in the buffer
-                        new12(head12) = bufferd;
-                        head12 = mod(head12, buffer_size12) + 1;
-                        if head12 == tail12
-                            tail12 = mod(tail12, buffer_size12) + 1; % Overwrite oldest data
-                        end
+                        fifo12 = [fifo12; bufferd];
                     elseif prev_byte == 2
                         % Store 16-bit data in the buffer
-                        new16(head16) = bufferd;
-                        head16 = mod(head16, buffer_size16) + 1;
-                        if head16 == tail16
-                            tail16 = mod(tail16, buffer_size16) + 1; % Overwrite oldest data
-                        end
+                        fifo16 = [fifo16; bufferd];
                     end
                     bufferd = bitand(byte, 63); % Store lower 6 bits for 16-bit data
                 case 2 % '10xxxxxx' - 16-bit data MSB
@@ -124,36 +124,6 @@ function Update(block)
 end
 
 function Terminate(block)
-     global s;
-    
-    global new12;
-    global new16;
-    
-    global head12;
-    global tail12;
-    global head16;
-    global tail16;
-    
-    global buffer_size12;
-    global buffer_size16;
-    
-    fprintf("12-bit data received:\n");
-    for i = tail12:buffer_size12
-        if i == head12
-            break;
-        end
-        fprintf('%d ', new12(i));
-    end
-    fprintf('\n');
-
-    fprintf("16-bit data received:\n");
-    for i = tail16:buffer_size16
-        if i == head16
-            break;
-        end
-        fprintf('%d ', new16(i));
-    end
-    fprintf('\n');
-
+    global s;
     delete(s);
 end
