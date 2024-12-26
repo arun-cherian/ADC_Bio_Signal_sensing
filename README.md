@@ -7,6 +7,7 @@ Hardware used:
 4.Cyclone 2 FPGA
 5.Biopotential amplifier 
 6.Electrodes
+7.Sound Card of PC(audio jack)
 
 
 Challenege:
@@ -34,10 +35,11 @@ Solutions :
     3.1 A compromise has to be made as there is no way to send data any faster though UART
     3.2 ADC updates the values while UART is sending sometimes but data reliabilty is good 
     3.3 ADC is stopped while sending NU7802 data since data could be corrupted by the very fast ADC data
-  
+
 
 
     //////////////// MSP code has been finalized and uploaded on 14.10.2024 ///////////////////////////////////////////////////////
+    Did some minor changes like adding DAC functionality after codefreeze
 
 Challenge:1. Matlab identifying the data as 12 bit or 16 bit
           solutions
@@ -52,8 +54,17 @@ Challenge :2  Data coming from the controller is so large that MATLAB is not abl
           3. Simulink is the way to go. created a level 2 s function so that I can do all the matlab code stuff in that block
           4. Data rate is still a challenge have to implement to check
           5. Frame based sampling of the scope successfully demostrated the ability to run in real time with sifficient speed
+
+Challenge :3 Reliability problem(Actually discovered after challenge 4)
+            1. The data that is sampled and sent to the pc seems to have a lot of unwanted artifacts and significant noise
+            2. Main reason behind this(which I believe) is improper grouping of data resulting in repetition during simulation
+            3. How do I know that the data that results from the algorithm is better than the original?
+            Solutions
+            1. The level 2 S function should be better optimized, inspiration can be drawn from the dsp.SineWave function of dsp library
+            2.  MAIN FINDING- Audio jack of the laptop (sound card to be precise) has the capability to sample at 16 bit depth and 44kHz frequency
+            3. This audio jack is a good way to actually check the accuracy of the data after combining the two data
           
-Challege :3 The final challenge of combining the two data from both microcontrollers
+Challege :4 The final challenge of combining the two data from both microcontrollers
           3.1 Are there some variation in the way the two ADCs responf to voltage variation, if so what is the relation?
           3.2 How to make sense of the EMG data?
               1. lot of artifacts and noise- the laptop charger plug being removed makes a remarkable difference
