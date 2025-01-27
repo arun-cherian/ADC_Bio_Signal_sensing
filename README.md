@@ -55,7 +55,7 @@ Challenge :2  Data coming from the controller is so large that MATLAB is not abl
           4. Data rate is still a challenge have to implement to check
           5. Frame based sampling of the scope successfully demostrated the ability to run in real time with sifficient speed
 
-Challenge :3 Reliability problem(Actually discovered after challenge 4)
+Challenge :3.1 Reliability problem(Actually discovered after challenge 4)
             1. The data that is sampled and sent to the pc seems to have a lot of unwanted artifacts and significant noise
             2. Main reason behind this(which I believe) is improper grouping of data resulting in repetition during simulation
             3. How do I know that the data that results from the algorithm is better than the original?
@@ -63,6 +63,10 @@ Challenge :3 Reliability problem(Actually discovered after challenge 4)
             1. The level 2 S function should be better optimized, inspiration can be drawn from the dsp.SineWave function of dsp library
             2.  MAIN FINDING- Audio jack of the laptop (sound card to be precise) has the capability to sample at 16 bit depth and 44kHz frequency
             3. This audio jack is a good way to actually check the accuracy of the data after combining the two data
+          3.2 unreliable hardware
+          1.CUrrent harware for collecting and amplifying bio signals is unreliable
+          2. create custom differencial ampplifier(instrument amplifier)
+          3. Experimenting with differnt op amps(so far 741 and 324 tried)
           
 Challege :4 The final challenge of combining the two data from both microcontrollers
           3.1 Are there some variation in the way the two ADCs responf to voltage variation, if so what is the relation?
