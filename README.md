@@ -79,6 +79,16 @@ Challege :4 The final challenge of combining the two data from both microcontrol
           1. Simulation was made real time using Real time desktop library of matlab
           2. Filtering began working after this change along with step time adjustment with presice calculation of the data throughput(about 11k samples per second for 12bit data)
           3. The harware seems to not output any meaningful EMG data in 60Hz-300Hz-have to try with differnt components;Hardware high pass filter for 50 Hz may not be working
+
+///////////////////////Harware(unexpected)////////////////////////////////////////////
+Had to do a detour into harware 
+Challenge 1: How to make an amplifier for amplifing small signals
+solution : Differenctial Amplifier-Instrumenttion amplifier with 7660 swithed capacitor IC
+Challenge 2: How to prevent the differencial amplifier from going to saturation during measurement
+          2.1 While doing measurements, there a drift in the output of the differential amplifier towards the negative rail
+          2.2 Tried an active bandpaass filter(didnt work)
+          2.3 Active biasing of amplifier
+          
           
     
    
