@@ -88,6 +88,12 @@ Challenge 2: How to prevent the differencial amplifier from going to saturation 
           2.1 While doing measurements, there a drift in the output of the differential amplifier towards the negative rail
           2.2 Tried an active bandpaass filter(didnt work)
           2.3 Active biasing of amplifier
+Solutions
+          1. The first stage of amplifier is set to veruy low gain to prevent saturation due to electrode potential differnce
+          2. Increased the impedence of the output satage of the difference amplifier which helped in the on side saturation issue
+          3. Integrator coupled with differencial amplifier and output stage low pass filter with high gain
+          4. No offset null or biasing needed, dc offset nulled out by the integrator coupled differencial amplifier, High pass charecteristics attained
+          5. 2v peak to peak achived using final stage amplification
           
           
     
