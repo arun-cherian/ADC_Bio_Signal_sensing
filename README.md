@@ -79,6 +79,7 @@ Challege :4 The final challenge of combining the two data from both microcontrol
           1. Simulation was made real time using Real time desktop library of matlab
           2. Filtering began working after this change along with step time adjustment with presice calculation of the data throughput(about 11k samples per second for 12bit data)
           3. The harware seems to not output any meaningful EMG data in 60Hz-300Hz-have to try with differnt components;Hardware high pass filter for 50 Hz may not be working
+     PROPOSAL: Use a neural network and train it on sound card data!!!
 
 ///////////////////////Harware(unexpected)////////////////////////////////////////////
 Had to do a detour into harware 
