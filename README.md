@@ -95,6 +95,9 @@ Solutions
           4. No offset null or biasing needed, dc offset nulled out by the integrator coupled differencial amplifier, High pass charecteristics attained
           5. 2v peak to peak achived using final stage amplification
           
-          
-    
+Challenge : 1.The hardware output is AC, but the ADCs need positive voltages(some of them since the sound card in PC i belive is also capable of taking negative also we get it after extensive processing)
+            2. The Sound card DC jack has DC bias can distort output
+Solution : 1.DC level shifter using op amp is implemented MSP430 and soundcard gets DC level shifted while NU7802 gets AC voltage
+            2. Using active buffers can help
+/////////////////////////////////////////////////Hardware is done(i hope)////////////////////////////////////////////////////////////////
    
